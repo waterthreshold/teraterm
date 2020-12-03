@@ -1,0 +1,71 @@
+strdim modal 21
+strdim boardid 21
+modal[0]='R6300v1'
+modal[1]='R6300v2'
+modal[2]='R6400'
+modal[3]='R6400v2'
+modal[4]='R6700'
+modal[5]='R6700v3'
+modal[6]='R6900'
+modal[7]='R7000'
+modal[8]='R7850'
+modal[9]='R7000P'
+modal[10]='R7900'
+modal[11]='R7900P'
+modal[12]='R8000'
+modal[13]='R8000P'
+modal[14]='R8500'
+modal[15]='RAX20'
+modal[16]='RAX50'
+modal[17]='RAX45'
+modal[18]='RAX80'
+modal[19]='XR300'
+modal[20]='XR1000'
+
+
+boardid[0]="U12H218T00"
+boardid[1]="U12H240T00"
+boardid[2]="U12H332T00"
+boardid[3]="U12H332T30"
+boardid[4]="U12H270T10"
+boardid[5]="U12H332T77"
+boardid[6]="U12H270T11"
+boardid[7]="U12H270T00"
+boardid[8]="U12H315T40"
+boardid[9]="U12H270T20"
+boardid[10]="U12H315T30"
+boardid[11]="U12H359T00"
+boardid[12]="U12H315T00"
+boardid[13]="U12H359T00"
+boardid[14]="U12H334T00"
+boardid[15]="U12H401T00"
+boardid[16]="U12H425T00"
+boardid[17]="U12H425T00"
+boardid[18]="U12H376T00"
+boardid[19]="U12H332T78"
+boardid[20]="U12H425T20"
+
+inputbox "Please input your modal" "modal name" 
+modalname=inputstr
+; messagebox modalname "123"
+toupper modalname modalname
+; messagebox modalname "123"
+strmatch  modalname "V"
+idx=result
+int2str s result
+; messagebox s "123"
+if result !=0 then
+strreplace modalname  idx "V" "v"
+endif
+; goto EXIT
+for i 0 20
+	strcompare modalname modal[i]
+	if result =0 then
+		sprintf2 cmd "burnboardid %s_NETGEAR" boardid[i]
+		sendln cmd 
+		break
+	endif
+next 
+:EXIT
+sendln "burnboardid"
+end

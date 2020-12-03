@@ -1,0 +1,45 @@
+send #21
+strdim nvram 3
+nvram[0]="get"
+nvram[1]="set"
+nvram[2]="show"
+listbox 'Select Device' 'Confirmation' nvram
+
+if result=0 then
+call nvram_get
+elseif result =1 then
+call nvram_set
+elseif result =2 then
+call nvram_show
+else
+goto END
+end  
+
+:END
+end
+
+
+
+:nvram_set
+inputbox "set nvram variable" "nvram set" "http_passwd"
+variable=inputstr
+sprintf2 dialog "set nvram variable:%s value" variable	
+inputbox dialog "nvram set" 
+value=inputstr
+sprintf2 cmd "nvram set %s=%s" variable value 
+sendln cmd
+return
+
+:nvram_get
+inputbox "Get nvram variable" "nvram get" "http_passwd"
+variable=inputstr
+sprintf2 cmd "nvram get %s" variable
+sendln cmd
+return
+
+:nvram_show
+inputbox "pattern" "nvram show" "http_passwd"
+pattern= inputstr
+sprintf2 cmd "nvram show | grep %s"  pattern
+sendln cmd
+return

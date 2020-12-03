@@ -1,0 +1,85 @@
+;tftpcmd 
+strdim dev 2
+dev[0]="ax"
+dev[1]="ac"
+cmd =""
+listbox "Select ac or ax" "select" dev
+
+if result=0 then
+path="/tmp/relocate_www"
+elseif result=1 then
+path="/tmp/www"
+else 
+goto EXIT
+endif
+
+
+inputbox "Input Your IP" "IP" "192.168.1.100"
+
+myIP=inputstr
+
+yesnobox "Do you want to kill hearbeat" "acos"
+
+if result =1 then 
+call command_return
+strconcat cmd "killall hearbeat"
+endif
+
+yesnobox "Do you want to relocate http" "acos"
+if result =1 then 
+my_device = dev[result]
+call relocate_www
+endif
+
+inputbox "Input your tftpcmd program" "acos" "httpd"
+tftpcmd=inputstr
+strlen tftpcmd
+bool_tftpcmd=0
+if result >0 then 
+inputbox "Have parameter?" "acos" "-S -E /usr/sbin/ca.pem /usr/sbin/httpsd.pem &"
+para=inputstr
+sprintf2 cmd2 "killall %s;tftp -g -l %s/%s -r %s %s;/tmp/%s %s" tftpcmd path tftpcmd tftpcmd myIP tftpcmd para
+call command_return
+sprintf2 cmd "%s%s" cmd cmd2
+bool_tftpcmd=1
+endif
+
+strscan tftpcmd "httpd"
+if bool_tftpcmd=0 ||  result > 0 then
+yesnobox "Do you want to load  html page" "acos"
+if result=1 then
+inputbox "Input your html page" "acos" "start.htm"
+html_page=inputstr
+; strcompare my_device "ax"
+; if result=1 then
+; path="/tmp/relocate_www"
+; else
+; path="/tmp/www"
+; endif
+sprintf2 html_cmd "tftp -g -l %s/%s -r %s %s"  path html_page html_page myIP
+call command_return
+sprintf2 cmd "%s%s" cmd html_cmd
+endif
+endif 
+
+
+yesnobox cmd  "acos" 
+if result=1 then
+sendln cmd 
+endif
+
+:EXIT
+end
+
+:relocate_www
+sprintf2 relocate_www_cmd "nvram set www_relocation=1;test -d %s && rm %s -rf ;cp /www %s -af" path path path
+call command_return
+sprintf2 cmd "%s%s" cmd  relocate_www_cmd
+return
+
+:command_return
+strlen cmd
+if result > 0 then 
+strconcat cmd ";"
+endif 
+return

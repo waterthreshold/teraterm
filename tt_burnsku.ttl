@@ -1,0 +1,22 @@
+;burnsku
+strdim sku 11
+sku[0]="none"
+sku[1]="NA"
+sku[2]="WW"
+sku[3]="GR"
+sku[4]="PR"
+sku[5]="RU"
+sku[6]="BZ"
+sku[7]="IN"
+sku[8]="KO"
+sku[9]="JP"
+sku[10]="AU"
+listbox "Select a sku" "sku" sku
+if result >=1 and result <=10 then 
+sprintf2 cmd "burnsku %d" result
+sendln cmd 
+endif
+
+:EXIT
+sendln "burnsku"
+end

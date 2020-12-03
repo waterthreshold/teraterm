@@ -1,0 +1,30 @@
+;ToCFE
+yesnobox "Do you want to access CFE?" "tera term " 
+if result != 1 then
+goto END
+endif
+
+inputbox "while access CFE wht command input it ?" "title"
+cmd = inputstr
+sendln "reboot" 
+timeout =30
+wait "Press any key to stop auto run" "CFE for Foxconn Router"
+if result = 0 then
+messagebox "TimeOUT"
+goto END
+endif 
+
+
+while result !=0
+send #3
+timeout =1
+wait "CFE>"
+endwhile
+
+strlen cmd
+if result > 0 then 
+sendln cmd
+end
+
+:END
+end

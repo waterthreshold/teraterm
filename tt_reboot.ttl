@@ -1,0 +1,66 @@
+;Document https://ttssh2.osdn.jp/manual/4/en/macro/command/index.html
+send #21
+strdim device 3
+device[0]='ac'
+device[1]='ax'
+listbox 'Select Device' 'Confirmation' device 
+
+
+if result =0 then
+cur_device = device [result]
+;messagebox cur_device "ttl_reboot"
+
+elseif result =1 then 
+cur_device = device [result]
+;messagebox cur_device "ttl_reboot"
+else 
+goto EXIT
+endif
+
+yesnobox 'Do you want to reboot' 'tera term'
+if result != 1 then
+goto EXIT
+endif
+
+yesnobox 'Do you want to JumpWizard' 'tera term'
+jumpwizard=result
+
+strcompare cur_device "ac"
+if result =0 then
+sendln "nvram loaddefault"
+sendln 'reboot'
+else
+sendln "loaddefault"
+sendln 'reboot'
+timeout=180
+wait " Broadband Router"
+sendln "Login:"
+sendln "admin"
+wait "Password: "
+sendln "admin"
+wait " > "
+sendln "sh"
+endif
+
+if jumpwizard=1 then
+call jumpwizard_func
+endif
+
+
+:EXIT
+end
+
+
+;jumpwizard
+
+:jumpwizard_func
+Timeout=180
+wait "#"
+strcompare cur_device "ax"
+if result =0 then
+cmd="nvram set need_to_show_ads_page=0;nvram set RA_enable=1;nvram set auto_update_enable=1;nvram set router_TC_enable=1;nvram set blank_state=0;nvram set weak_passwd_neverRemind=1"
+else
+cmd="nvram set blank_state=0"
+endif
+sendln cmd
+return
