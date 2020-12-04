@@ -62,7 +62,7 @@ sprintf2 cmd "%s%s" cmd html_cmd
 endif
 endif 
 
-
+var2clipb cmd
 yesnobox cmd  "acos" 
 if result=1 then
 sendln cmd 
