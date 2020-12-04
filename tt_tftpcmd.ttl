@@ -36,9 +36,9 @@ tftpcmd=inputstr
 strlen tftpcmd
 bool_tftpcmd=0
 if result >0 then 
-inputbox "Have parameter?" "acos" "-S -E /usr/sbin/ca.pem /usr/sbin/httpsd.pem &"
+inputbox "Have parameter?" "acos" "-S -E /usr/sbin/ca.pem /usr/sbin/httpsd.pem "
 para=inputstr
-sprintf2 cmd2 "killall %s;tftp -g -l %s/%s -r %s %s;/tmp/%s %s" tftpcmd path tftpcmd tftpcmd myIP tftpcmd para
+sprintf2 cmd2 "killall %s;tftp -g -l /tmp/%s -r %s %s;chmod u+x /tmp/%s;/tmp/%s %s" tftpcmd  tftpcmd tftpcmd myIP tftpcmd tftpcmd para
 call command_return
 sprintf2 cmd "%s%s" cmd cmd2
 bool_tftpcmd=1
