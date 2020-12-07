@@ -2,3 +2,21 @@ Description :
 Teraterm Macro Script file 
 
 #please put the userdefine.ttl in your teraterm root directory
+
+Data Structure:
+tt_list a class for arraylist (To many bug)
+
+Data Structure test program:
+test.ttl tt_list test program  (Just run it)
+
+userdefine.ttl th teratearm script collector 
+add app.list in the same directory 
+shortcut to keyboard.cnf
+
+app:
+tt_tocfe.ttl: reboot and goto CFE command line and execute commnad
+tt_tftpcmd.ttl: create quickly common use tftpcommnad in the clipboard 
+tt_reboot.ttl:DUT loaddefault and jumpwizard or not 
+tt_nvram.ttl: nvram varible control
+tt_burnsku.ttl: burn DUT SKU ID
+tt_burnboardid: Burn DUT hardware ID
