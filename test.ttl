@@ -1,0 +1,58 @@
+; sample programe for List structure
+include 'tt_framework.ttl'
+
+g_List="app,init,1:apple;2:bird;3:cookie;5:dog"
+include 'tt_list.ttl'
+
+; goto g_List_class
+
+g_List="app,size"
+; goto g_List_class
+include 'tt_list.ttl'
+sprintf2 str "%d" result
+messagebox str "Finba"
+
+
+; g_List "app,push,6:elephant"
+; goto g_List_class
+
+
+
+; g_List "app,pop"
+; goto g_List_class 
+
+; g_List "app,get"
+; goto g_List_class
+
+
+; g_List "app,set,2:dolphine"
+; goto g_List_class 
+
+; g_List "app,delete,1"
+; goto g_List_class 
+
+g_List="app,traverse"
+include 'tt_list.ttl'
+g_List="app,get,5"
+include 'tt_list.ttl'
+sprintf2 msg "index=%d , value=%s " result param1
+messagebox msg "get result"
+; goto List_traverse 
+
+g_List="app,set,5:cat"
+include 'tt_list.ttl'
+
+
+g_List="app,get,5"
+include 'tt_list.ttl'
+sprintf2 msg "index=%d , value=%s " result param1
+messagebox msg "get result"
+
+g_List="app,set,6:hahaha"
+include 'tt_list.ttl'
+
+g_List="app,traverse"
+include 'tt_list.ttl'
+; messagebox tmp
+end
+

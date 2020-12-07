@@ -1,0 +1,125 @@
+;Structure list :name,func,xxx:xxx;xxx;xxx:xxxx
+
+; :g_List_class
+MORETHAN10FLAG=0
+strlen g_list
+if result <= 0 then 
+exit 
+endif
+strsplit g_List ","  
+list_name=groupmatchstr1
+sprintf2 str "ifdefined %s_size" groupmatchstr1
+
+if result !=0 then 
+sprintf2 tmp "str2int list_num %s_size" groupmatchstr1
+execcmnd tmp
+
+endif
+
+sprintf2 str "ifdefined %s_list" groupmatchstr1
+; messagebox  groupmatchstr1 "tt " 
+execcmnd str
+
+; if result !=0 then
+sprintf2 str2 "call List_%s" groupmatchstr2
+; messagebox  groupmatchstr2 "tt " 
+execcmnd  str2
+; endif
+
+
+:List_init  
+list_init_variable=groupmatchstr3
+strsplit list_init_variable ";" 
+list_num=result
+if result >= 10 then
+MORETHAN10FLAG=1
+endif
+int2str list_num_str list_num
+; messagebox  list_num_str "12" 
+sprintf2 g_ParaExec "%s_size=%s" list_name list_num_str
+execcmnd g_ParaExec
+sprintf2 g_ParaExec "strdim %s_key %d" list_name 256
+execcmnd g_ParaExec
+sprintf2 g_ParaExec "strdim %s_value %d" list_name 256
+execcmnd g_ParaExec
+strdim tmp_String 256
+
+ ; messagebox param[9] "123"
+
+for i 0 8
+sprintf2 tmp "tmp_String[%d]=groupmatchstr%d"  i  i+1
+execcmnd tmp
+next 
+
+; sprintf2 tmp "for i 0 %s_size" list_name
+; execcmnd tmp
+for i 0 list_num-1
+sprintf2 tmp "strsplit tmp_String[%d] ':' 2" i
+execcmnd tmp 
+; messagebox tmp_String[0] "123"
+sprintf2 g_ParaExec "%s_key[%d]='%s'" list_name i groupmatchstr1
+; messagebox g_ParaExec "123"
+execcmnd g_ParaExec
+sprintf2 g_ParaExec "%s_value[%d]='%s'" list_name i groupmatchstr2
+execcmnd g_ParaExec
+; messagebox g_ParaExec "123"
+next 
+; strdim xxx_value
+exit
+
+:List_size
+result=list_num
+; MessageBox list_num_str "size"
+; execcmnd 
+exit
+
+:List_get
+for i 0 list_num-1
+sprintf2 tmp "strcompare %s_key[%d] groupmatchstr3" list_name i
+execcmnd tmp 
+	if result = 0 then
+		
+		sprintf2 tmp "param1=%s_value[%d]" list_name i
+		execcmnd tmp
+		result=i
+		break
+	endif
+next
+exit
+
+:List_set
+sprintf2 tmp "strsplit groupmatchstr3 ':' 2" 
+execcmnd tmp
+for i 0 list_num-1
+sprintf2 tmp "strcompare %s_key[%d] groupmatchstr1" list_name i
+execcmnd tmp 
+	if result = 0 then
+		sprintf2 tmp "%s_value[%d]=groupmatchstr2" list_name i
+		execcmnd tmp
+		
+		exit
+	endif
+next
+sprintf2 tmp "%s_key[%d]=groupmatchstr1" list_name list_num
+execcmnd tmp
+sprintf2 tmp "%s_value[%d]=groupmatchstr2" list_name list_num
+execcmnd tmp  
+list_num=list_num+1
+exit
+
+:List_traverse
+msg=""
+for i 0 list_num-1
+sprintf2 tmp "key_tmp=%s_key[%d]"  list_name  i
+execcmnd tmp 
+sprintf2 tmp "val_tmp=%s_value[%d]" list_name i
+execcmnd tmp 
+sprintf2 tmp  "%s:%s," key_tmp  val_tmp
+
+strconcat msg tmp
+next 
+messagebox msg "traverse"
+exit
+
+
+
