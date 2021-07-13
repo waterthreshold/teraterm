@@ -3,19 +3,11 @@ send #21
 strdim device 3
 device[0]='ac'
 device[1]='ax'
+device[2]='RAX80'
 listbox 'Select Device' 'Confirmation' device 
 
+cur_device = result
 
-if result =0 then
-cur_device = device [result]
-;messagebox cur_device "ttl_reboot"
-
-elseif result =1 then 
-cur_device = device [result]
-;messagebox cur_device "ttl_reboot"
-else 
-goto EXIT
-endif
 
 yesnobox 'Do you want to reboot' 'tera term'
 if result != 1 then
@@ -25,11 +17,11 @@ endif
 yesnobox 'Do you want to JumpWizard' 'tera term'
 jumpwizard=result
 
-strcompare cur_device "ac"
-if result =0 then
+; strcompare cur_device "ac"
+if cur_device=0  then
 sendln "nvram loaddefault"
 sendln 'reboot'
-else
+elseif cur_device=1 then  
 sendln "loaddefault"
 sendln 'reboot'
 timeout=180
@@ -40,6 +32,9 @@ wait "Password: "
 sendln "admin"
 wait " > "
 sendln "sh"
+elseif cur_device=2 then 
+sendln "nvram loaddefault"
+sendln 'reboot'
 endif
 
 if jumpwizard=1 then
@@ -54,10 +49,11 @@ end
 ;jumpwizard
 
 :jumpwizard_func
-Timeout=180
-wait "#"
-strcompare cur_device "ax"
-if result =0 then
+pause 160  ;stop 160 sec = 2mins 40 sec
+sendkcode 28 3
+
+; strcompare cur_device "ax"
+if cur_device =1 || cur_device =2 then
 cmd="nvram set need_to_show_ads_page=0;nvram set RA_enable=1;nvram set auto_update_enable=1;nvram set router_TC_enable=1;nvram set blank_state=0;nvram set weak_passwd_neverRemind=1"
 else
 cmd="nvram set blank_state=0"

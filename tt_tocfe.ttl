@@ -15,11 +15,11 @@ goto END
 endif 
 
 
-while result !=0
+do 
 send #3
-timeout =1
-wait "CFE>"
-endwhile
+timeout=2
+wait 'CFE>' 
+loop while result = 0
 
 strlen cmd
 if result > 0 then 
