@@ -1,0 +1,60 @@
+strdim server_title 10
+strdim SSH_server 10
+strdim SSH_server_username 10
+strdim SSH_server_password 10
+
+server_title[0]="172.18.40.19"
+SSH_server[0]="172.18.40.19"
+SSH_server_username[0]="jeff"
+SSH_server_password[0]="jeff"
+
+
+server_title[1]="172.18.4.186"
+SSH_server[1]="172.18.4.186"
+SSH_server_username[1]="jeff"
+SSH_server_password[1]="831633"
+
+server_title[2]="172.18.40.41(NEW SERVER)"
+SSH_server[2]="172.18.40.41"
+SSH_server_username[2]="jeff"
+SSH_server_password[2]="jeff12345"
+
+
+server_title[3]="172.18.4.194(builder)"
+SSH_server[3]="172.18.4.194"
+SSH_server_username[3]="builder"
+SSH_server_password[3]="builder"
+
+server_title[4]="172.18.4.164 (eric)"
+SSH_server[4]="172.18.4.164"
+SSH_server_username[4]="eric"
+SSH_server_password[4]="eric"
+
+
+server_title[5]="192.168.1.1 (Telnet)"
+SSH_server[5]="192.168.1.1"
+SSH_server_username[4]="admin"
+SSH_server_password[4]="password"
+
+
+listbox 'Select SSH Server' 'Confirmation' server_title
+index=result
+if index <0 then 
+exit
+endif
+
+;showtt 4
+if index <=4 then
+sprintf2 ssh_parameter   '%s /ssh /2  /auth=password /user=%s /passwd=%s'  SSH_server[index] SSH_server_username[index] SSH_server_password[index]
+else 
+sprintf2 ssh_parameter   '%s:23 /nossh /T=1'  SSH_server[index]
+endif 
+
+
+
+;messagebox ssh_parameter "haha" 
+connect ssh_parameter
+
+
+
+;sendln 
